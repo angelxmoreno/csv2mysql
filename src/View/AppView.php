@@ -15,7 +15,8 @@ declare(strict_types=1);
  */
 namespace App\View;
 
-use Cake\View\View;
+use App\View\Helper\NavLinkHelper;
+use BootstrapUI\View\UIView;
 
 /**
  * Application View
@@ -23,9 +24,13 @@ use Cake\View\View;
  * Your application's default view class
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
+ *
+ * @property NavLinkHelper $NavLink
  */
-class AppView extends View
+class AppView extends UIView
 {
+    protected $layout = 'bootstrap5';
+
     /**
      * Initialization hook method.
      *
@@ -37,5 +42,14 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        parent::initialize();
+        $this->loadHelper('Html', [
+            'className' => 'BootstrapUI.Html',
+            'iconDefaults' => [
+                'namespace' => 'fa',
+                'prefix' => 'fa',
+            ],
+        ]);
+        $this->loadHelper('NavLink');
     }
 }
