@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "688dcc5d63fcdb13f0a93bbd5f6d0e3b",
+    "content-hash": "f3e3e28a67f3a1ff48ca3c582b595e44",
     "packages": [
         {
             "name": "cakephp/cakephp",
@@ -5853,6 +5853,68 @@
                 }
             ],
             "time": "2023-02-08T07:49:20+00:00"
+        },
+        {
+            "name": "veewee/composer-run-parallel",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/veewee/composer-run-parallel.git",
+                "reference": "e6908df2e7fa27140fbccb955fe8da8d8f176d37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/veewee/composer-run-parallel/zipball/e6908df2e7fa27140fbccb955fe8da8d8f176d37",
+                "reference": "e6908df2e7fa27140fbccb955fe8da8d8f176d37",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "~2.0",
+                "php": "^7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0 "
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "react/promise": "1.2.1",
+                "symfony/process": "2.8.52"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "ComposerRunParallel\\ParallelPlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ComposerRunParallel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Toon Verwerft",
+                    "email": "toonverwerft@gmail.com"
+                }
+            ],
+            "description": "Run composer tasks in parallel",
+            "keywords": [
+                "composer",
+                "parallel",
+                "plugin",
+                "run",
+                "taskmanager"
+            ],
+            "support": {
+                "issues": "https://github.com/veewee/composer-run-parallel/issues",
+                "source": "https://github.com/veewee/composer-run-parallel/tree/1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/veewee",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-11-04T08:34:58+00:00"
         }
     ],
     "aliases": [],
