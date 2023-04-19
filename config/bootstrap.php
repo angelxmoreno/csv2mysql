@@ -45,6 +45,7 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use josegonzalez\Dotenv\Loader;
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -60,13 +61,15 @@ use Cake\Utility\Security;
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-//     $dotenv->parse()
-//         ->putenv()
-//         ->toEnv()
-//         ->toServer();
-// }
+$envFile1 = ROOT . DS . '.env';
+$envFile2 = ROOT . DS . 'prod.env';
+$envFile = file_exists($envFile1) ? $envFile1 : $envFile2;
+if (file_exists($envFile)) {
+    $dotenv = new Loader([$envFile]);
+    $dotenv->parse()
+        ->toEnv()
+        ->toServer();
+}
 
 /*
  * Read configuration file and inject configuration into various
