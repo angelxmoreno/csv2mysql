@@ -7,7 +7,6 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
 /**
  * CsvFiles Model
  *
@@ -26,65 +25,76 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\CsvFile[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ *
+ * @method \App\Model\Entity\CsvFile upsert(array $search, ?array $data = null)
  */
-class CsvFilesTable extends Table
+class CsvFilesTable extends TableBase
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
+/**
+* Initialize method
+*
+* @param array $config The configuration for the Table.
+* @return void
+*/
+public function initialize(array $config): void
+{
+parent::initialize($config);
 
-        $this->setTable('csv_files');
-        $this->setDisplayField('name');
+    $this->setTable('csv_files');
+    $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
-    }
-
+    $this->addBehavior('Timestamp');
+}
+    
     /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
+    * Default validation rules.
+    *
+    * @param \Cake\Validation\Validator $validator Validator instance.
+    * @return \Cake\Validation\Validator
+    */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->notEmptyString('name');
-
-        $validator
-            ->scalar('table_name')
-            ->maxLength('table_name', 100)
-            ->requirePresence('table_name', 'create')
-            ->notEmptyString('table_name')
-            ->add('table_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
-
-        $validator
-            ->nonNegativeInteger('num_rows')
-            ->requirePresence('num_rows', 'create')
-            ->notEmptyString('num_rows');
-
-        return $validator;
+                                $validator
+                                            ->scalar('name')
+                                            ->maxLength('name', 100)
+                                                                                ->notEmptyString('name');
+            
+                                        $validator
+                                            ->scalar('table_name')
+                                            ->maxLength('table_name', 100)
+                                            ->requirePresence('table_name', 'create')
+                                            ->notEmptyString('table_name')
+                                                                                ->add('table_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            
+                                        $validator
+                                            ->nonNegativeInteger('num_rows')
+                                                                                ->allowEmptyString('num_rows');
+            
+                                        $validator
+                                            ->scalar('status')
+                                            ->maxLength('status', 100)
+                                                                                ->allowEmptyString('status');
+            
+                                        $validator
+                                            ->scalar('error_message')
+                                                                                ->allowEmptyString('error_message');
+            
+                return $validator;
     }
-
+    
     /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
+    * Returns a rules checker object that will be used for validating
+    * application integrity.
+    *
+    * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+    * @return \Cake\ORM\RulesChecker
+    */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['table_name']), ['errorField' => 'table_name']);
-
-        return $rules;
+                                    $rules->add($rules->isUnique(['table_name']), ['errorField' => 'table_name']);
+                                    $rules->add($rules->isUnique(['name', 'table_name']), ['errorField' => 'name']);
+    
+    return $rules;
     }
 }

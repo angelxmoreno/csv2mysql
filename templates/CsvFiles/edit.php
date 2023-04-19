@@ -22,6 +22,8 @@ $this->assign('subTitle', 'edit');
                 echo $this->Form->control('name');
                 echo $this->Form->control('table_name');
                 echo $this->Form->control('num_rows');
+                echo $this->Form->control('status');
+                echo $this->Form->control('error_message');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Edit'), [

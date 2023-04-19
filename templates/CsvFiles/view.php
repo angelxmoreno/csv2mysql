@@ -27,6 +27,10 @@ $this->assign('subTitle', 'view');
                             <th scope="row"><?= __('Table Name') ?></th>
                             <td><?= h($csvFile->table_name) ?></td>
                         </tr>
+                                                                                <tr>
+                            <th scope="row"><?= __('Status') ?></th>
+                            <td><?= h($csvFile->status) ?></td>
+                        </tr>
                                                                                                             <tr>
                         <th scope="row"><?= __('Id') ?></th>
                         <td><?= $this->Number->format($csvFile->id) ?></td>
@@ -45,4 +49,8 @@ $this->assign('subTitle', 'view');
                     </tr>
                                                 </table>
     </div>
+                        <div class="text">
+                <h4><?= __('Error Message') ?></h4>
+                <?= $this->Text->autoParagraph(h($csvFile->error_message)); ?>
             </div>
+                    </div>

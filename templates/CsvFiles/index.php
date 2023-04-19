@@ -21,6 +21,8 @@ $this->assign('title', 'Csv Files')
                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('table_name') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('num_rows') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('status') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('error_message') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -33,6 +35,8 @@ $this->assign('title', 'Csv Files')
                                                                                                                             <td><?= h($csvFile->name) ?></td>
                                                                                                                             <td><?= h($csvFile->table_name) ?></td>
                                                                                                                             <td><?= $this->Number->format($csvFile->num_rows) ?></td>
+                                                                                                                            <td><?= h($csvFile->status) ?></td>
+                                                                                                                            <td><?= h($csvFile->error_message) ?></td>
                                                                                                                             <td><?= h($csvFile->created) ?></td>
                                                                                                                             <td><?= h($csvFile->modified) ?></td>
                                             <td class="actions">
