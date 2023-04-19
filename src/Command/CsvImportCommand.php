@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Model\Table\CsvFilesTable;
+use App\Utility\RuntimeTable;
 use Cake\Chronos\Chronos;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
@@ -133,38 +134,6 @@ class CsvImportCommand extends Command
         return $tableHeaders;
     }
 
-    protected function tableExists(): bool
-    {
-        $allTables = ConnectionManager::get('default')->getSchemaCollection()->listTables();
-        return in_array($this->tableName, $allTables);
-    }
-
-    protected function createTable(array $columns)
-    {
-        $connection = ConnectionManager::get('default');
-        $dbConfig = $connection->config();
-        $dbConfig['adapter'] = 'mysql';
-        $dbConfig['pass'] = $dbConfig['password'];
-        $dbConfig['user'] = $dbConfig['username'];
-        $dbConfig['name'] = $dbConfig['database'];
-        $adapter = new CakeAdapter(new MysqlAdapter($dbConfig), $connection);
-
-        $table = new Table($this->tableName, [], $adapter);
-        $table->addPrimaryKey(['id'])->addColumn('created', 'datetime', [
-            'default' => null,
-            'limit' => null,
-            'null' => true,
-        ]);
-        foreach ($columns as $column) {
-            $table->addColumn($column, 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ]);
-        }
-        $table->create();
-    }
-
     /**
      * @throws Exception
      * @throws UnableToProcessCsv|Throwable
@@ -174,13 +143,13 @@ class CsvImportCommand extends Command
         $this->reader->setHeaderOffset($this->offSet);
         $csvHeaders = $this->reader->getHeader();
         $tableHeaders = $this->buildTableColumnsFromHeaders($csvHeaders);
-        if (!$this->tableExists()) {
-            $this->createTable($tableHeaders);
+        if (!RuntimeTable::tableExists($this->tableName)) {
+            RuntimeTable::createTable($this->tableName, $tableHeaders);
         }
         $stmt = (new Statement())->offset($this->offSet)->limit($this->limit);
 
-        $table = $this->fetchTable($this->tableName);
-        $table->deleteAll([]);
+        $tableOrm = RuntimeTable::loadTable($this->tableName);
+        $tableOrm->deleteAll([]);
         $records = $stmt->process($this->reader, $tableHeaders);
         $csvFile = $this->CsvFiles->findOrCreate([
             'name' => pathinfo($this->filePath, PATHINFO_FILENAME),
@@ -202,9 +171,9 @@ class CsvImportCommand extends Command
         try {
             $this->io->out(sprintf('Saving %s records', $recordCount));
             foreach ($records as $index => $record) {
-                $entity = $table->newEntity($record);
+                $entity = $tableOrm->newEntity($record);
                 $entity->set('created', Chronos::now());
-                $table->saveOrFail($entity);
+                $tableOrm->saveOrFail($entity);
                 $progress->increment(1);
                 $progress->draw();
             }
