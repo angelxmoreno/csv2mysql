@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 
 $this->prepend('css', $this->Html->css([
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
-    'https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/pulse/bootstrap.min.css',
+    'https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/simplex/bootstrap.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.min.css',
     'main',
 ]));
@@ -38,7 +38,9 @@ $this->prepend('script', $this->Html->script([
 </div>
 <footer class="py-5 bg-primary">
     <div class="container px-4 px-lg-5">
-        <p class="m-0 text-center text-white">Copyright © Your Website 2022</p>
+        <p class="m-0 text-center text-white">
+            <?= Configure::read('App.siteName', 'A CakePHP Site') ?> <?= date('Y') ?>
+        </p>
     </div>
 </footer>
 <?= $this->fetch('script') ?>

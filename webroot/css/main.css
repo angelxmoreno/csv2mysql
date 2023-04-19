@@ -1,0 +1,7 @@
+html {
+    overflow-y: scroll;
+}
+
+#main-container {
+    min-height: 83vh;
+}
