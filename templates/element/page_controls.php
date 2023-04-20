@@ -20,17 +20,16 @@ if ($entity) {
     }
     $identifier = $identifier ?? $entity->id;
 }
-
+$options = [
+    'class' => 'btn btn-outline-info',
+];
 $deleteBtn = $this->Form->postLink(__('Delete'), ['action' => 'delete', $identifier], ['confirm' => __('Are you sure you want to delete # {0}?', $identifier), 'title' => __('Delete'), 'class' => 'btn btn-outline-danger']);
-$viewBtn = $this->Html->link('View', ['action' => 'view', $identifier], ['title' => __('View'), 'class' => 'btn btn-outline-success']);
-$addBtn = '';//$this->Html->link(__('Add'), ['action' => 'add'], ['title' => __('Add'), 'class' => 'btn btn-outline-info']);
-$listBtn = $this->Html->link(__('List'), ['action' => 'index'], ['title' => __('List'), 'class' => 'btn btn-outline-info']);
-$editBtn = '';//$this->Html->link('Edit', ['action' => 'edit', $identifier], ['title' => __('Edit'), 'class' => 'btn btn-outline-warning']);
+$viewBtn = $this->Html->link('Info', ['action' => 'view', $identifier], $options);
+$colBtn = $this->Html->link('Columns', ['action' => 'columns', $identifier], $options);
+$dataBtn = $this->Html->link('Data', ['action' => 'data', $identifier], $options);
+$listBtn = $this->Html->link(__('List'), ['action' => 'index'], $options);
 ?>
 <div class="btn-group btn-group-sm mb-2" role="group">
-    <?= $mode === 'list' ? $addBtn : '' ?>
-    <?= $mode === 'create' ? $listBtn : '' ?>
-    <?= $mode === 'edit' ? $listBtn . $viewBtn . $deleteBtn . $addBtn : '' ?>
-    <?= $mode === 'view' ? $listBtn . $editBtn . $deleteBtn . $addBtn : '' ?>
+    <?= $mode === 'view' ? $listBtn . $viewBtn . $colBtn . $dataBtn . $deleteBtn : '' ?>
 </div>
 

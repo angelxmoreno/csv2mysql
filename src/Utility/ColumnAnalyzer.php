@@ -11,6 +11,7 @@ class ColumnAnalyzer
 
     protected string $name;
     protected ?int $numValues = null;
+    protected ?int $numNulls = null;
     protected array $values = [];
 
     /**
@@ -41,10 +42,26 @@ class ColumnAnalyzer
             $this->numValues = $this->table->find()
                 ->distinct($field)
                 ->select([$field])
+                ->whereNotNull([$field])
                 ->count();
         }
         return $this->numValues;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getNumNulls(): ?int
+    {
+        if (is_null($this->numNulls)) {
+            $field = $this->name;
+            $this->numNulls = $this->table->find()
+                ->whereNull([$field])
+                ->count();
+        }
+        return $this->numNulls;
+    }
+
 
     public function getValues(?int $limit = 20): array
     {
@@ -52,8 +69,8 @@ class ColumnAnalyzer
             $field = $this->name;
             $query = $this->table->find()
                 ->distinct($field)
-                ->select([$field]);
-
+                ->select([$field])
+                ->whereNotNull([$field]);
             if (!!$limit) {
                 $query->limit($limit);
             }

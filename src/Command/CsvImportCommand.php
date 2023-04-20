@@ -167,10 +167,14 @@ class CsvImportCommand extends Command
             'total' => $recordCount,
         ]);
 
-
         try {
             $this->io->out(sprintf('Saving %s records', $recordCount));
             foreach ($records as $index => $record) {
+                foreach ($record as $k => $v){
+                    if(trim($v) === '') {
+                        $record[$k] = null;
+                    }
+                }
                 $entity = $tableOrm->newEntity($record);
                 $entity->set('created', Chronos::now());
                 $tableOrm->saveOrFail($entity);

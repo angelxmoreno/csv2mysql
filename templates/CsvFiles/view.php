@@ -12,15 +12,26 @@ use Cake\Utility\Inflector;
 
 $this->extend('/Common/view');
 $this->assign('entity', $csvFile);
-$this->assign('title', 'Csv File');
-$this->assign('subTitle', 'view');
+$this->assign('title', 'Csv File: ' . $csvFile->name);
+$this->assign('subTitle', 'info');
+
+
+$this->Breadcrumbs->add('Home', '/');
+$this->Breadcrumbs->add($this->getRequest()->getParam('controller'), ['action' => 'index']);
+$this->Breadcrumbs->add($csvFile->name);
+$this->Breadcrumbs->add('Info');
+$this->assign('breadCrumbs', $this->Breadcrumbs->render());
 ?>
 
 
 <div class="csvFiles">
-    <h4><?= h($csvFile->name) ?></h4>
+    <h4>File Information</h4>
     <div class="table-responsive">
         <table class="table table-striped">
+            <tr>
+                <th scope="row"><?= __('File Name') ?></th>
+                <td><?= h($csvFile->name) ?></td>
+            </tr>
             <tr>
                 <th scope="row"><?= __('Table Name') ?></th>
                 <td><?= h($csvFile->table_name) ?></td>
@@ -41,33 +52,6 @@ $this->assign('subTitle', 'view');
                 <th scope="row"><?= __('Created') ?></th>
                 <td><?= h($csvFile->created) ?></td>
             </tr>
-        </table>
-    </div>
-
-    <h4>Columns</h4>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <tr>
-                <th scope="row">Name</th>
-                <th scope="row">Total Unique Values</th>
-                <th scope="row">Unique Values ( limit 30 )</th>
-            </tr>
-
-            <?php foreach ($analysis->getColumns() as $column): ?>
-                <tr>
-                    <td><?= Inflector::humanize($column->getName()) ?></td>
-                    <td><?= $column->getNumValues() ?></td>
-                    <td>
-                        <?php
-                        if($column->getNumValues() === $csvFile->num_rows || in_array($column->getName(), ['id','created'])){
-                            echo "MANY";
-                        } else {
-                            echo implode(', ', $column->getValues(30));
-                        }
-                        ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
         </table>
     </div>
 </div>

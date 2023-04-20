@@ -36,11 +36,24 @@ class CsvFilesController extends AppController
      */
     public function view(?string $id = null)
     {
-        $csvFile = $this->CsvFiles->get($id, [
-            'contain' => [],
-        ]);
+        $csvFile = $this->CsvFiles->get($id);
+        $this->set(compact('csvFile'));
+    }
+
+    public function columns(?string $id = null)
+    {
+        $csvFile = $this->CsvFiles->get($id);
         $analysis = new TableAnalyzer(RuntimeTable::loadTable($csvFile->table_name));
         $this->set(compact('csvFile', 'analysis'));
+    }
+
+    public function data(?string $id = null)
+    {
+        $csvFile = $this->CsvFiles->get($id);
+        $table = RuntimeTable::loadTable($csvFile->table_name);
+        $rows = $this->paginate($table);
+
+        $this->set(compact('rows', 'csvFile'));
     }
 
     /**
