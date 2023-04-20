@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Utility\RuntimeTable;
+use App\Utility\TableAnalyzer;
+use Cake\Datasource\Exception\RecordNotFoundException;
+
 /**
  * CsvFiles Controller
  *
@@ -14,7 +18,7 @@ class CsvFilesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return void Renders view
      */
     public function index()
     {
@@ -27,60 +31,29 @@ class CsvFilesController extends AppController
      * View method
      *
      * @param string|null $id Csv File id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return void Renders view
+     * @throws RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
-        $csvFile = $this->CsvFiles->get($id, [
-            'contain' => [],
-        ]);
-
+        $csvFile = $this->CsvFiles->get($id);
         $this->set(compact('csvFile'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
+    public function columns(?string $id = null)
     {
-        $csvFile = $this->CsvFiles->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $csvFile = $this->CsvFiles->patchEntity($csvFile, $this->request->getData());
-            if ($this->CsvFiles->save($csvFile)) {
-                $this->Flash->success(__('The csv file has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The csv file could not be saved. Please, try again.'));
-        }
-        $this->set(compact('csvFile'));
+        $csvFile = $this->CsvFiles->get($id);
+        $analysis = new TableAnalyzer(RuntimeTable::loadTable($csvFile->table_name));
+        $this->set(compact('csvFile', 'analysis'));
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Csv File id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
+    public function data(?string $id = null)
     {
-        $csvFile = $this->CsvFiles->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $csvFile = $this->CsvFiles->patchEntity($csvFile, $this->request->getData());
-            if ($this->CsvFiles->save($csvFile)) {
-                $this->Flash->success(__('The csv file has been saved.'));
+        $csvFile = $this->CsvFiles->get($id);
+        $table = RuntimeTable::loadTable($csvFile->table_name);
+        $rows = $this->paginate($table);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The csv file could not be saved. Please, try again.'));
-        }
-        $this->set(compact('csvFile'));
+        $this->set(compact('rows', 'csvFile'));
     }
 
     /**
@@ -88,13 +61,15 @@ class CsvFilesController extends AppController
      *
      * @param string|null $id Csv File id.
      * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null): ?\Cake\Http\Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $csvFile = $this->CsvFiles->get($id);
+        $tableName = $csvFile->table_name;
         if ($this->CsvFiles->delete($csvFile)) {
+            RuntimeTable::removeTable($tableName);
             $this->Flash->success(__('The csv file has been deleted.'));
         } else {
             $this->Flash->error(__('The csv file could not be deleted. Please, try again.'));

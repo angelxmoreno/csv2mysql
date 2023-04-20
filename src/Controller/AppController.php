@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Core\App;
 use Exception;
 
 /**
@@ -51,6 +52,5 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
-        $this->viewBuilder()->setTheme('BakeTheme');
     }
 }

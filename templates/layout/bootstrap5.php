@@ -32,7 +32,7 @@ $this->prepend('script', $this->Html->script([
 </head>
 <body>
 <?= $this->element('nav') ?>
-<div id="main-container">
+<div id="main-container" class="container-fluid">
     <?= $this->Flash->render() ?>
     <?= $this->fetch('content') ?>
 </div>

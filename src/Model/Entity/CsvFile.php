@@ -11,7 +11,9 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  * @property string $table_name
- * @property int $num_rows
+ * @property int|null $num_rows
+ * @property string|null $status
+ * @property string|null $error_message
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  */
@@ -30,6 +32,8 @@ class CsvFile extends Entity
         'name' => true,
         'table_name' => true,
         'num_rows' => true,
+        'status' => true,
+        'error_message' => true,
         'created' => true,
         'modified' => true,
     ];

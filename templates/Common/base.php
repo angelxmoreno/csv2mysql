@@ -17,7 +17,7 @@ if (!$this->exists('breadCrumbs')) {
     if ($plugin) {
         $this->Breadcrumbs->add($plugin);
     }
-    if($action === 'index') {
+    if ($action === 'index') {
         $this->Breadcrumbs->add($controller);
         $this->Breadcrumbs->add('List');
     } else {
@@ -30,11 +30,13 @@ if (!$this->exists('breadCrumbs')) {
 if ($this->exists('viewMode') && !$this->exists('pageControls')) {
     $this->assign('pageControls', $this->element('/page_controls', [
         'mode' => $this->fetch('viewMode'),
-        'entity' => $this->fetch('entity')
+        'entity' => $this->fetch('entity'),
     ]));
 }
+
+$contentClass = $this->fetch('contentClass', 'container');
 ?>
-<main class="container">
+<section class="container">
     <?php if ($this->fetch('title')) : ?>
         <h1 class="d-flex d-inline-flex">
             <?= $this->fetch('title') ?>
@@ -45,5 +47,7 @@ if ($this->exists('viewMode') && !$this->exists('pageControls')) {
         <?= $this->fetch('breadCrumbs') ?>
         <hr/>
     <?php endif; ?>
+</section>
+<section class="<?= $contentClass ?>">
     <?= $this->fetch('content') ?>
-</main>
+</section>
